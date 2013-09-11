@@ -7,6 +7,7 @@ from test_stats.models import *
 
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
+import datetime
 
 import StringIO
 
@@ -63,5 +64,43 @@ class JSONTest(TestCase):
         val = self.doSerialize(NFLWeeklyStat, NFLWeeklyStatSerializer)
 	gold = NFLWeeklyStat.objects.get(id=stat.id)
         self.assertEquals(gold.rushYds, val.rushYds)
+#        print dir(stat)
+#        print dir(val)
+
+    def testPicks(self):
+        user = User(username="bar", password="whatever")
+        user.save()
+        player = FFLPlayer(user=user, teamname="Redskins", email="Foobar", league=0)
+        player.save()
+
+        teplayer = NFLPlayer(name="Tightty", team="Redskins", position="TE")
+        teplayer.save()
+        qbplayer = NFLPlayer(name="Quarty", team="Redskins", position="QB")
+        qbplayer.save()
+        wrplayer = NFLPlayer(name="Widey", team="Redskins", position="WR")
+        wrplayer.save()
+        rbplayer = NFLPlayer(name="Runny", team="Redskins", position="RB")
+        rbplayer.save()
+
+        pick = Picks(fflPlayer=player, week=1, qb=qbplayer, rb=rbplayer, te=teplayer, wr=wrplayer, mod_time=datetime.datetime.now())
+        pick.save()
+
+        pick = Picks(fflPlayer=player, week=2, qb=qbplayer, rb=rbplayer, te=teplayer, wr=wrplayer, mod_time=datetime.datetime.now())
+        pick.save()
+        
+        val = self.doSerialize(Picks, PicksSerializer)
+	gold = Picks.objects.get(id=pick.id)
+        self.assertEquals(gold.te, val.te)
+
+    def testFFLPlayer(self):
+        user = User(username="bar", password="whatever")
+        user.save()
+
+        player = FFLPlayer(user=user, teamname="Redskins", email="Foobar", league=0)
+        player.save()
+        
+        val = self.doSerialize(FFLPlayer, FFLPlayerSerializer)
+	gold = FFLPlayer.objects.get(id=player.id)
+        self.assertEquals(gold.teamname, val.teamname)
 #        print dir(stat)
 #        print dir(val)

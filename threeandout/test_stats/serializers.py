@@ -1,7 +1,7 @@
 
 from django.forms import widgets
 from rest_framework import serializers
-from test_stats.models import NFLPlayer, NFLWeeklyStat #, LANGUAGE_CHOICES, STYLE_CHOICES
+from test_stats.models import NFLPlayer, NFLWeeklyStat, FFLPlayer, Picks #, LANGUAGE_CHOICES, STYLE_CHOICES
 
 
 class NFLPlayerSerializer(serializers.ModelSerializer):
@@ -32,3 +32,14 @@ class NFLWeeklyStatSerializer(serializers.ModelSerializer):
         fields = ('id', 'week', 'score', 'recTd', 'recYds', 'fumbles', 'interceptions',
               'passTd', 'passYds', 'fumbleRecoveryTDs', 'rushYds', 'rushTd', 'player')
    
+class FFLPlayerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FFLPlayer
+        fields = ('user', 'teamname', 'email', 'league')
+
+class PicksSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Picks
+        fields = ('fflPlayer', 'week', 'qb', 'wr', 'rb', 'te', 'mod_time')
