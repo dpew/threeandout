@@ -6,5 +6,5 @@ Replace this with more appropriate tests for your application.
 """
 
 print "Hello"
-from test_stats.unit_tests.test_json import *
+from test_stats.unittests.test_json import *
 
