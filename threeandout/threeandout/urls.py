@@ -22,8 +22,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+#    url(r'^', include(router.urls)),
+#    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^rest/players/$', 'test_stats.views.player_list'),
+    url(r'^rest/players/(?P<pk>[0-9]+)/$', 'test_stats.views.player_detail'),
     # Examples:
     # url(r'^$', 'threeandout.views.home', name='home'),
     # url(r'^threeandout/', include('threeandout.foo.urls')),
