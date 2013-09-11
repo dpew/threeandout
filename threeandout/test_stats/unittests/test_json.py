@@ -15,34 +15,38 @@ class JSONTest(TestCase):
     def doSerialize(self, model, serializer):
         obj = model.objects.all()[0]
         serial_data = serializer(obj)
-        print serial_data.data
 
         content = JSONRenderer().render(serial_data.data)
-        print content
+        ncontent = content.replace('Doe', 'Don')
+        ncontent = ncontent.replace('44', '45')
+        print ncontent
 
-        stream = StringIO.StringIO(content)
+        stream = StringIO.StringIO(ncontent)
         data = JSONParser().parse(stream)
 
-        serial_data2 = serializer(data=data)
+        serial_data2 = serializer(obj, data=data)
         self.assertTrue(serial_data2.is_valid())
+        serial_data2.save(force_update=True)
 
-        print serial_data2.object
 
         serial_data3 = serializer(model.objects.all(), many=True)
-        print serial_data3.data
-        
+        return serial_data2.object
 
 
     def testNFLPlayer(self):
         
         player = NFLPlayer(name="John Doe", team="Redskins", position="TE")
         player.save()
-
-        player = NFLPlayer(name="Freddie Doe", team="Redskins", position="QB")
+        player.team = "skins"
         player.save()
 
-        self.doSerialize(NFLPlayer, NFLPlayerSerializer)
-        return
+        player2 = NFLPlayer(name="Freddie Doe", team="Redskins", position="QB")
+        player2.save()
+
+        p = self.doSerialize(NFLPlayer, NFLPlayerSerializer)
+        p2 = NFLPlayer.objects.get(id=player.id)
+        self.assertEquals(p2, p)
+        self.assertEquals(p2.name, p.name)
 
     def testNFLWeeklyStat(self):
         player = NFLPlayer(name="John Doe", team="Redskins", position="TE")
@@ -52,5 +56,12 @@ class JSONTest(TestCase):
               passTd=100, passYds=20, fumbleRecoveryTDs=10, rushYds=44, rushTd=1, player=player)
         stat.save()
 
-        self.doSerialize(NFLWeeklyStat, NFLWeeklyStatSerializer)
-        return
+        stat2 = NFLWeeklyStat(week=2, score=12.2, recTd=5, recYds=4, fumbles=4, interceptions=4,
+              passTd=100, passYds=20, fumbleRecoveryTDs=15, rushYds=54, rushTd=12, player=player)
+        stat2.save()
+
+        val = self.doSerialize(NFLWeeklyStat, NFLWeeklyStatSerializer)
+	gold = NFLWeeklyStat.objects.get(id=stat.id)
+        self.assertEquals(gold.rushYds, val.rushYds)
+#        print dir(stat)
+#        print dir(val)
