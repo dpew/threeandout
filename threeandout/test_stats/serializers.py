@@ -36,7 +36,7 @@ class FFLPlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FFLPlayer
-        fields = ('user', 'teamname', 'email', 'league')
+        fields = ('id', 'user', 'teamname', 'email', 'league')
 
 class PicksSerializer(serializers.ModelSerializer):
 

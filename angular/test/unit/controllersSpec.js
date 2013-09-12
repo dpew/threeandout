@@ -20,7 +20,7 @@ describe('FantasyPlayer controllers', function() {
 
     beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
       $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('rest/fplayer').
+      $httpBackend.expectGET('../../../rest/fplayers').
           respond([{"id": 1, "user": 2, "teamname": "whatever", "email": "foo.bar@gmail.com", "league": 0}]);
 
       scope = $rootScope.$new();
@@ -55,7 +55,7 @@ describe('FantasyPlayer controllers', function() {
 
     beforeEach(inject(function(_$httpBackend_, $rootScope, $routeParams, $controller) {
       $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('rest/fplayer/1').respond(xyzPhoneData());
+      $httpBackend.expectGET('../../../rest/fplayers/1').respond(xyzPhoneData());
 
       $routeParams.Id = '1';
       scope = $rootScope.$new();
