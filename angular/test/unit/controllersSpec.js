@@ -1,7 +1,7 @@
 'use strict';
 
 /* jasmine specs for controllers go here */
-describe('PhoneCat controllers', function() {
+describe('FantasyPlayer controllers', function() {
 
   beforeEach(function(){
     this.addMatchers({
@@ -12,62 +12,62 @@ describe('PhoneCat controllers', function() {
   });
 
 
-  beforeEach(module('phonecatServices'));
+  beforeEach(module('taoServices'));
 
 
-  describe('PhoneListCtrl', function(){
+  describe('FantasyPlayerListCtrl', function(){
     var scope, ctrl, $httpBackend;
 
     beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
       $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('phones/phones.json').
-          respond([{name: 'Nexus S'}, {name: 'Motorola DROID'}]);
+      $httpBackend.expectGET('rest/fplayer').
+          respond([{"id": 1, "user": 2, "teamname": "whatever", "email": "foo.bar@gmail.com", "league": 0}]);
 
       scope = $rootScope.$new();
-      ctrl = $controller(PhoneListCtrl, {$scope: scope});
+      ctrl = $controller(FantasyPlayerListCtrl, {$scope: scope});
     }));
 
 
-    it('should create "phones" model with 2 phones fetched from xhr', function() {
-      expect(scope.phones).toEqual([]);
+    it('should create "fantasy player" model with 1 fantasy player fetched from xhr', function() {
+      expect(scope.players).toEqual([]);
       $httpBackend.flush();
 
-      expect(scope.phones).toEqualData(
-          [{name: 'Nexus S'}, {name: 'Motorola DROID'}]);
+      expect(scope.players).toEqualData(
+          [{"id": 1, "user": 2, "teamname": "whatever", "email": "foo.bar@gmail.com", "league": 0}]);
     });
 
 
-    it('should set the default value of orderProp model', function() {
-      expect(scope.orderProp).toBe('age');
-    });
   });
 
 
-  describe('PhoneDetailCtrl', function(){
+  describe('FantasyPlayerDetailCtrl', function(){
     var scope, $httpBackend, ctrl,
         xyzPhoneData = function() {
           return {
-            name: 'phone xyz',
-                images: ['image/url1.png', 'image/url2.png']
+              "id": 1,
+              "user": 2,
+              "teamname": "whatever",
+	       "email": "foo.bar@gmail.com",
+               "league": 0
           }
         };
 
 
     beforeEach(inject(function(_$httpBackend_, $rootScope, $routeParams, $controller) {
       $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('phones/xyz.json').respond(xyzPhoneData());
+      $httpBackend.expectGET('rest/fplayer/1').respond(xyzPhoneData());
 
-      $routeParams.phoneId = 'xyz';
+      $routeParams.Id = '1';
       scope = $rootScope.$new();
-      ctrl = $controller(PhoneDetailCtrl, {$scope: scope});
+      ctrl = $controller(FantasyPlayerDetailCtrl, {$scope: scope});
     }));
 
 
-    it('should fetch phone detail', function() {
-      expect(scope.phone).toEqualData({});
+    it('should fetch fantasy player detail', function() {
+      expect(scope.player).toEqualData({});
       $httpBackend.flush();
 
-      expect(scope.phone).toEqualData(xyzPhoneData());
+      expect(scope.player).toEqualData(xyzPhoneData());
     });
   });
 });

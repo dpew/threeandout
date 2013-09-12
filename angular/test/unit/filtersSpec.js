@@ -4,7 +4,7 @@
 
 describe('filter', function() {
 
-  beforeEach(module('phonecatFilters'));
+  beforeEach(module('taoFilters'));
 
 
   describe('checkmark', function() {

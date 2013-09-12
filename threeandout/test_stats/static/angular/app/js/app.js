@@ -2,10 +2,10 @@
 
 /* App Module */
 
-angular.module('phonecat', ['phonecatFilters', 'phonecatServices']).
+angular.module('tao', ['taoFilters', 'taoServices']).
   config(['$routeProvider', function($routeProvider) {
   $routeProvider.
-      when('/phones', {templateUrl: 'partials/phone-list.html',   controller: PhoneListCtrl}).
-      when('/phones/:phoneId', {templateUrl: 'partials/phone-detail.html', controller: PhoneDetailCtrl}).
-      otherwise({redirectTo: '/phones'});
+      when('/fplayer', {templateUrl: 'partials/fplayer-list.html',   controller: FantasyPlayerListCtrl}).
+      when('/fplayer/:Id', {templateUrl: 'partials/fplayer-detail.html', controller: FantasyPlayerDetailCtrl}).
+      otherwise({redirectTo: '/fplayer'});
 }]);
